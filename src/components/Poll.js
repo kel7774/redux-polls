@@ -1,14 +1,19 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { getPercentage } from '../utils/helpers'
+import { handleAddAnswer } from '../actions/answers'
 
 const getVoteKeys = () => ['aVotes', 'bVotes', 'cVotes', 'dVotes']
 
 class Poll extends Component {
     handleAnswer = (answer) => {
         const { poll, authedUser } = this.props
-        console.log('add answer')
         this.answered = true
+        this.props.dispatch(handleAddAnswer({
+            authedUser,
+            answer,
+            id: poll.id,
+        }))
     }
     render(){
         if(this.props.poll === null){
@@ -32,7 +37,8 @@ class Poll extends Component {
                         const count = poll[key[0] + "Votes"].length
 
                         return (
-                            <li 
+                            <li
+                            key={key} 
                             className=
                             {`option ${vote === key[0] ? 'chosen' : ''}`}
 
